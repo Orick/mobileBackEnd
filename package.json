@@ -1,0 +1,27 @@
+{
+  "name": "mobileBackEnd",
+  "version": "0.0.0",
+  "description": ":(",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "author": "Dios",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "firebase": "^4.12.1",
+    "firebase-admin": "^5.12.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "nodemon": "^1.17.2",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "pug": "2.0.0-beta11",
+    "sequelize": "^4.37.4"
+  }
+}
