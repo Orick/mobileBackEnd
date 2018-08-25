@@ -5,8 +5,16 @@
   "scripts": {
     "start": "node ./bin/www"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Orick/mobileBackEnd.git"
+  },
   "author": "Dios",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Orick/mobileBackEnd/issues"
+  },
+  "homepage": "https://github.com/Orick/mobileBackEnd#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
