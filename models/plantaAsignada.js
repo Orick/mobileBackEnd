@@ -6,9 +6,31 @@ module.exports = (sequelize, DataTypes) => {
         fechaFin: {
             type: DataTypes.DATE,
             allowNull: true
+        },
+        estado:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        nombrePlanta:{
+            type: DataTypes.STRING,
+            allowNull: false
         }
     });
+    plantaAsignada.associate =  (models) => {
+        plantaAsignada.hasMany(models.fotos, {
+            as: 'asignadaFoto'
+        });
 
+        // plantaAsignada.hasMany(models.notificaciones, {
+        //      as: 'asignadaNotificaciones'
+        // });
+
+        plantaAsignada.hasMany(models.planta, {
+            as: 'asignadaPlanta'
+        });
+
+
+    };
 
 
     return plantaAsignada;

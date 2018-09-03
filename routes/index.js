@@ -10,29 +10,27 @@ router.get('/', (req, res) => {
 
 router.get('/testSelect', (req, res) => {
     console.log(">>>>BBB<<<<<");
-    models.summoner
-        .findAll()
-        .then(users => {
-            if (users) {
-                res.json({
-                    status: 1,
-                    statusCode: 'summoner/listing',
-                    data: users
-                });
-            } else {
-                res.status(400).json({
-                    status: 0,
-                    statusCode: 'summoner/all/not-found',
-                    description: 'There\'s no user information!'
-                });
+    models.user.findAll({
+        where:{
+            token:"A"
+        },
+        include: {
+            model: models.macetero,
+            as: 'userMacetero',
+            where : {
+                idMacetero: "a"
             }
-        }).catch(error => {
-        res.status(400).json({
-            status: 0,
-            statusCode: 'database/error',
-            description: error.toString()
+        }
+    }).then( relacionX => {
+            res.json({
+                relacionX
+            });
+    }).catch(error => {
+        res.json({
+            error
         });
     });
+
 });
 
 

@@ -8,10 +8,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true
         },
-        nombrePlanta:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         nombreRed:{
             type: DataTypes.STRING,
             allowNull: false
@@ -19,22 +15,25 @@ module.exports = (sequelize, DataTypes) => {
         passRed:{
             type: DataTypes.STRING,
             allowNull: false
-        },
-        estado:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        ip:{
-            type: DataTypes.STRING,
-            allowNull: false
         }
     });
-    // macetero.associate =  (models) => {
-    //     user.BelongsTo(models.summoner, {
-    //         through: 'associateUser',
-    //         as : 'user',
-    //         unique: true
-    //     });
-    // };
+    macetero.associate =  (models) => {
+
+        macetero.hasMany(models.agua, {
+            as: 'maceteroAgua'
+        });
+
+        macetero.hasMany(models.humedad, {
+            as: 'maceteroHumedad'
+        });
+
+        macetero.hasMany(models.luz, {
+            as: 'maceteroLuz'
+        });
+
+        macetero.hasMany(models.plantaAsignada, {
+            as: 'maceteroPlanta'
+        });
+    };
     return macetero;
 };

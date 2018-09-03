@@ -6,10 +6,6 @@ module.exports = (sequelize, DataTypes) => {
         valor: {
             type: DataTypes.INTEGER,
             allowNull: false
-        },
-        descripcion:{
-            type: DataTypes.STRING,
-            allowNull: false
         }
     });
 
