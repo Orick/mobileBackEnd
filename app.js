@@ -6,6 +6,7 @@ const logger = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
+const notificacionesRouter = require('./routes/notificaciones');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
@@ -30,7 +31,7 @@ app.use('/', indexRouter);
 //  Orick  End //
 
 //  Aleeh  Begin //
-//  app.use('/champions', championsRouter);
+app.use('/notificaciones', notificacionesRouter);
 //  Aleeh  End //
 
 //  BloodRage  Begin //
