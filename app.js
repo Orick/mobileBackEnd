@@ -7,6 +7,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
 const notificacionesRouter = require('./routes/notificaciones');
+const fotosRouter = require('./routes/fotos');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
@@ -35,7 +36,7 @@ app.use('/notificaciones', notificacionesRouter);
 //  Aleeh  End //
 
 //  BloodRage  Begin //
-//app.use('/items', itemsRouter);
+app.use('/fotos', fotosRouter);
 //  BloodRage  End //
 
 
