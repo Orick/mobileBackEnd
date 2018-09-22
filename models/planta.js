@@ -24,5 +24,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         }
     });
+    // planta.associate =  (models) => {
+    //     planta.hasMany(models.plantaAsignada, {
+    //         as: 'asignadaPlantaX',
+    //         through: 'asignadaPlanta'
+    //     });
+    // };
+
     return planta;
 };

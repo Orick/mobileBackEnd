@@ -24,11 +24,9 @@ module.exports = (sequelize, DataTypes) => {
         // plantaAsignada.hasMany(models.notificaciones, {
         //      as: 'asignadaNotificaciones'
         // });
-
-        plantaAsignada.hasMany(models.planta, {
-            as: 'asignadaPlanta'
+        plantaAsignada.belongsToMany(models.planta, {
+            through: 'asignadaPlanta'
         });
-
 
     };
 

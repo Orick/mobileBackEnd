@@ -5,9 +5,13 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+
+
 const indexRouter = require('./routes/index');
 const notificacionesRouter = require('./routes/notificaciones');
 const fotosRouter = require('./routes/fotos');
+const sensoresRouter = require('./routes/sensores');
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
@@ -28,7 +32,7 @@ app.use('/', indexRouter);
 
 
 //  Orick  Begin //
-// app.use('/summoner', summonerRouter);
+app.use('/sensores', sensoresRouter);
 //  Orick  End //
 
 //  Aleeh  Begin //

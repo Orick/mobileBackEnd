@@ -7,14 +7,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true
-        },
-        mail:{
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        contrasena:{
-            type: DataTypes.STRING,
-            allowNull: false
         }
     });
     user.associate =  (models) => {
