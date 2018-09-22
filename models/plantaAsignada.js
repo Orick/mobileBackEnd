@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         nombrePlanta:{
             type: DataTypes.STRING,
             allowNull: false
+        },
+        tipoCuidado:{
+            type: DataTypes.BOOLEAN,
+            allowNull: false
         }
     });
     plantaAsignada.associate =  (models) => {
@@ -29,7 +33,8 @@ module.exports = (sequelize, DataTypes) => {
         });
 
     };
-
-
     return plantaAsignada;
 };
+
+//tipoCuidato 1 = Optimo
+//tipoCuidato 0 = Minimo

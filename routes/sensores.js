@@ -14,7 +14,8 @@ router.post('/insertMacetero',(req,res,next)=>{
         models.plantaAsignada.create({
             fechaFin: new Date(),
             estado: 'ok',
-            nombrePlanta: 'test1'
+            nombrePlanta: 'test1',
+            tipoCuidado: 1
         }).then(plantaAsignadaCreated =>{
             maceteroCreated.addMaceteroPlanta(plantaAsignadaCreated);
 
@@ -73,7 +74,8 @@ router.post('/insertMacetero2',(req,res,next)=>{
         models.plantaAsignada.create({
             fechaFin: new Date(),
             estado: 'ok',
-            nombrePlanta: 'test2'
+            nombrePlanta: 'test2',
+            tipoCuidado: 0
         }).then(plantaAsignadaCreated =>{
             maceteroCreated.addMaceteroPlanta(plantaAsignadaCreated);
 
@@ -249,7 +251,7 @@ const insertHumedad = async (macetero, valor) =>{
                 if( datosPlanta ){
 
                     console.log(planta);
-
+                    resolve({ok:planta.dataValues.maceteroPlanta[0].dataValues.planta[0]});
 
                 }else{
                     reject({
