@@ -30,4 +30,63 @@ router.get('/all', (req, res, next)=>{
     });
 });
 
+router.post('/search', (req, res, next)=>{
+    var idMacetero = req.body['idMacetero'];
+    /* firebaseAdmin.auth().verifyIdToken(req.body.token)
+        .then(decodedToken => {
+                var iduser = decodedToken.uid; */
+    models.plantaAsignada
+    .findOne({
+        where:  {maceteroIdMacetero: idMacetero,
+                estado: 1
+                }
+    })
+    .then(response=>{
+        if (response){
+            models.notificaciones
+            .findAll({
+                where: {plantaAsignadaId: response.id}
+            })
+            .then(notificaciones=>{
+                if (notificaciones){
+                    res.json({
+                        status: 1,
+                        data: notificaciones
+                    });
+                }else {
+                    res.status(400).json({
+                        status:0
+                    });
+                }
+                    
+            }).catch(error => {
+                res.status(400).json({
+                    status:0,
+                    error
+                });
+            });
+            /* res.json({
+                status: 1,
+            data: response
+            }); */
+        } else {
+            res.status(400).json({
+                status:0
+            });
+        }
+    }).catch(error => {
+        res.status(400).json({
+            status:0,
+            error
+        });
+    });
+/* }).catch(error =>{
+        res.json({
+            code:'0',
+            error,
+            description:'error al verificar token de usuario',
+        });
+    }); */
+});
+
     module.exports = router;
