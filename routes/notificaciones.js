@@ -5,6 +5,7 @@ const models = require('../models');
 const router = express.Router();
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const firebaseAdmin = require('../config/firebaseConfig');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 

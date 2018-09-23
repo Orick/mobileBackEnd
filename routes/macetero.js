@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const models = require('../models');
 const router = express.Router();
 const Sequelize = require('sequelize');
+const firebaseAdmin = require('../config/firebaseConfig');
 const Op = Sequelize.Op;
 
 app.use(bodyParser.urlencoded({ extended: false }));
