@@ -14,7 +14,7 @@ router.post('/insertMacetero',(req,res,next)=>{
 
         models.plantaAsignada.create({
             fechaFin: new Date(),
-            estado: 'ok',
+            estado: true,
             nombrePlanta: 'test1',
             tipoCuidado: 1
         }).then(plantaAsignadaCreated =>{
@@ -134,10 +134,11 @@ router.post('/insert',(req,res,next)=>{
         include: {
             model: models.plantaAsignada,
             as: 'maceteroPlanta',
-            order: 'createdAt DESC',
+            where: {
+                estado : true
+            },
             include: {
-                model: models.planta,
-                order: 'createdAt DESC'
+                model: models.planta
             }
         }
     }).then( macetero => {
@@ -173,6 +174,7 @@ router.post('/insert',(req,res,next)=>{
             });
         }
     }).catch(error => {
+        console.log(error);
         res.json({
             status: 0,
             statusCode: 'sensores/insert/error55',
