@@ -15,7 +15,7 @@ router.post('/insert',(req,res,next)=>{
 	    humedadMinima: req.body.humedadMinima,
 	    luzOptima: req.body.luzOptima,
 	    luzMinima: req.body.luzMinima
-	}).then(maceteroCreated =>{
+	}).then(plantaCreated =>{
 	    res.json({
 	        status: 1,
 	        statusCode: 'plantas/insert/ok',
