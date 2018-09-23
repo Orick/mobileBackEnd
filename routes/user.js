@@ -9,7 +9,7 @@ router.post('/create',(req,res,next)=>{
     .then(function(userRecord) {
         res.json({
             status: 1,
-            statusCode: 'assocciatedAccounts/create/error',
+            statusCode: 'user/create/error',
             description:'email ya existente'
         });
     }).catch(function(error) {
@@ -21,18 +21,18 @@ router.post('/create',(req,res,next)=>{
         .then(function(userRecord) {
             console.log("Usuario", userRecord.uid);
 
-            models.userSummoner.create({
+            models.user.create({
                 token:userRecord.uid
             }).then(userCreated =>{
                 res.json({
                     status: 1,
-                    statusCode: 'assocciatedAccounts/create/ok',
+                    statusCode: 'user/create/ok',
                     description: 'Usuario creado'
                 })
             }).catch(error => {
                 res.json({
                     status: 0,
-                    statusCode: 'assocciatedAccounts/create/error',
+                    statusCode: 'user/create/error',
                     description: 'Error base de datos'
                 });
             });
@@ -40,7 +40,7 @@ router.post('/create',(req,res,next)=>{
         .catch(function(error) {
             res.json({
                 status: 1,
-                statusCode: 'assocciatedAccounts/create/error',
+                statusCode: 'user/create/error',
                 description:'Firebase error, creando usuario',
                 error: error
             });
@@ -48,7 +48,7 @@ router.post('/create',(req,res,next)=>{
     });
 });
 
-router.post('/updateUserPassword', (req, res, next) => {
+router.post('/updatePassword', (req, res, next) => {
     firebaseAdmin.auth().verifyIdToken(req.body.token)
     .then(decodedToken => {
 
@@ -57,14 +57,14 @@ router.post('/updateUserPassword', (req, res, next) => {
         }).then( userRecord => {
             res.json({
                 status: 1,
-                statusCode: 'assocciatedAccounts/updateUserPassword',
+                statusCode: 'user/updateUserPassword',
                 description: 'update de password correcto'
             });
         }).catch( error => {
             console.log("error wtd");
             res.json({
                 status: 1,
-                statusCode: 'assocciatedAccounts/updateUserPassword/error',
+                statusCode: 'user/updateUserPassword/error',
                 description:'Firebase error, update password',
                 error: error
             });
@@ -78,92 +78,60 @@ router.post('/updateUserPassword', (req, res, next) => {
     });
 });
 
-router.post('/get', (req, res, next) => {
-    firebaseAdmin.auth().verifyIdToken(req.body.token)
-    .then(decodedToken => {
-        models.userSummoner
-        .findAll({
-            where:{
-                token:decodedToken.uid
-            },
-            include:{
-                model:models.summoner,
-                through :'associateUserSum',
-                as: 'userSummonerX',
-                include:{
-                    model:models.league,
-                    as : 'summonerLeague'
-                }
-
-            }
-        }).then(users => {
-            if (users) {
-                dataSummoners = users[0].userSummonerX.map(d => {
-                    delete d.dataValues.associateUserSum;
-                    return d;
-                });
-                res.json({
-                    status: 1,
-                    statusCode: 'userSummoner/get/listing',
-                    data: dataSummoners
-                });
-            } else {
-                res.status(400).json({
-                    status: 0,
-                    statusCode: 'userSummoner/not-found',
-                    description: 'There\'s no user information!'
-                });
-            }
-        }).catch(error => {
-            res.status(400).json({
-                status: 0,
-                statusCode: 'database/error',
-                description: error.toString()
-            });
-        });
-    }).catch(error =>{
-        res.json({
-            code:'0',
-            description:'error al verificar token de usuario',
-        });
-    });
-});
-
-
-
-// router.get('/all', (req, res, next) => {
-//     models.userSummoner
-//     .findAll(
-//         {
+// router.post('/get', (req, res, next) => {
+//     firebaseAdmin.auth().verifyIdToken(req.body.token)
+//     .then(decodedToken => {
+//         models.userSummoner
+//         .findAll({
+//             where:{
+//                 token:decodedToken.uid
+//             },
 //             include:{
 //                 model:models.summoner,
 //                 through :'associateUserSum',
-//                 as: 'userSummonerX'
+//                 as: 'userSummonerX',
+//                 include:{
+//                     model:models.league,
+//                     as : 'summonerLeague'
+//                 }
+//
 //             }
-//         }
-//     )
-//     .then(users => {
-//         if (users) {
-//             res.json({
-//                 status: 1,
-//                 statusCode: 'userSummoner/listing',
-//                 data: users
-//             });
-//         } else {
+//         }).then(users => {
+//             if (users) {
+//                 dataSummoners = users[0].userSummonerX.map(d => {
+//                     delete d.dataValues.associateUserSum;
+//                     return d;
+//                 });
+//                 res.json({
+//                     status: 1,
+//                     statusCode: 'userSummoner/get/listing',
+//                     data: dataSummoners
+//                 });
+//             } else {
+//                 res.status(400).json({
+//                     status: 0,
+//                     statusCode: 'userSummoner/not-found',
+//                     description: 'There\'s no user information!'
+//                 });
+//             }
+//         }).catch(error => {
 //             res.status(400).json({
 //                 status: 0,
-//                 statusCode: 'userSummoner/not-found',
-//                 description: 'There\'s no user information!'
+//                 statusCode: 'database/error',
+//                 description: error.toString()
 //             });
-//         }
-//     }).catch(error => {
-//         res.status(400).json({
-//             status: 0,
-//             statusCode: 'database/error',
-//             description: error.toString()
+//         });
+//     }).catch(error =>{
+//         res.json({
+//             code:'0',
+//             description:'error al verificar token de usuario',
 //         });
 //     });
 // });
+
+
+
+
 
 
 

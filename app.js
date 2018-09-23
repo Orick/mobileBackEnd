@@ -11,6 +11,7 @@ const indexRouter = require('./routes/index');
 const notificacionesRouter = require('./routes/notificaciones');
 const fotosRouter = require('./routes/fotos');
 const sensoresRouter = require('./routes/sensores');
+const userRouter = require('./routes/user');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -33,6 +34,7 @@ app.use('/', indexRouter);
 
 //  Orick  Begin //
 app.use('/sensores', sensoresRouter);
+app.use('/user', userRouter);
 //  Orick  End //
 
 //  Aleeh  Begin //
