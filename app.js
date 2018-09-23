@@ -12,6 +12,7 @@ const notificacionesRouter = require('./routes/notificaciones');
 const fotosRouter = require('./routes/fotos');
 const sensoresRouter = require('./routes/sensores');
 const userRouter = require('./routes/user');
+const plantaRouter = require('./routes/planta');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,6 +40,7 @@ app.use('/user', userRouter);
 
 //  Aleeh  Begin //
 app.use('/notificaciones', notificacionesRouter);
+app.use('/planta',plantaRouter);
 //  Aleeh  End //
 
 //  BloodRage  Begin //
