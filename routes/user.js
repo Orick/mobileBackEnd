@@ -57,14 +57,14 @@ router.post('/updatePassword', (req, res, next) => {
         }).then( userRecord => {
             res.json({
                 status: 1,
-                statusCode: 'user/updateUserPassword',
+                statusCode: 'user/updatePassword',
                 description: 'update de password correcto'
             });
         }).catch( error => {
             console.log("error wtd");
             res.json({
                 status: 1,
-                statusCode: 'user/updateUserPassword/error',
+                statusCode: 'user/updatePassword/error',
                 description:'Firebase error, update password',
                 error: error
             });
@@ -77,57 +77,6 @@ router.post('/updatePassword', (req, res, next) => {
         });
     });
 });
-
-// router.post('/get', (req, res, next) => {
-//     firebaseAdmin.auth().verifyIdToken(req.body.token)
-//     .then(decodedToken => {
-//         models.userSummoner
-//         .findAll({
-//             where:{
-//                 token:decodedToken.uid
-//             },
-//             include:{
-//                 model:models.summoner,
-//                 through :'associateUserSum',
-//                 as: 'userSummonerX',
-//                 include:{
-//                     model:models.league,
-//                     as : 'summonerLeague'
-//                 }
-//
-//             }
-//         }).then(users => {
-//             if (users) {
-//                 dataSummoners = users[0].userSummonerX.map(d => {
-//                     delete d.dataValues.associateUserSum;
-//                     return d;
-//                 });
-//                 res.json({
-//                     status: 1,
-//                     statusCode: 'userSummoner/get/listing',
-//                     data: dataSummoners
-//                 });
-//             } else {
-//                 res.status(400).json({
-//                     status: 0,
-//                     statusCode: 'userSummoner/not-found',
-//                     description: 'There\'s no user information!'
-//                 });
-//             }
-//         }).catch(error => {
-//             res.status(400).json({
-//                 status: 0,
-//                 statusCode: 'database/error',
-//                 description: error.toString()
-//             });
-//         });
-//     }).catch(error =>{
-//         res.json({
-//             code:'0',
-//             description:'error al verificar token de usuario',
-//         });
-//     });
-// });
 
 
 
