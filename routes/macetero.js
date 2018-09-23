@@ -40,5 +40,68 @@ router.post('/insert',(req,res,next)=>{
         });
 });
 
+router.post('/asignarplanta',(req,res,next)=>{
+    var idMacetero = req.body['idMacetero'];
+    var fechaFin = new Date();
+    var estado = (req.body['estado'] == "1");
+    var nombrePlanta = req.body['nombrePlanta'];
+    var tipoCuidado = (req.body['tipoCuidado'] == "1");
+
+    models.macetero.findOne({
+        where:{
+            idMacetero: idMacetero
+        }
+    })
+    .then(macetero => {
+        models.plantaAsignada.create({
+            fechaFin: fechaFin,
+            estado: estado,
+            nombrePlanta: nombrePlanta,
+            tipoCuidado: tipoCuidado
+        })
+        .then(associatedPlant =>{
+            /* res.json({
+                status: 1,
+                statusCode: 'plantaAsignada creada'
+            });  */
+
+            macetero.addplantaAsignada(associatedPlant.id)
+        })
+        .catch(error => {
+            res.json({
+                status: 0,
+                statusCode: 'Ocurrio un error'
+            });
+        });
+    })
+    .catch(error => {
+        res.json({
+            status: 0,
+            statusCode: 'No se encontro macetero'
+        });
+    });
+});
+
+router.get('/:id', (req, res) => {
+    models.macetero.findOne({
+        where: {
+          ididMacetero: req.params.id
+        }
+    })
+    .then(macetero =>{
+        res.json({
+            status: 1,
+            data: macetero
+        });
+    })
+    .catch(error => {
+        console.log('Ocurrio un error')
+        res.status(400).json({
+            status:0,
+            data: error
+        })
+    });
+});
+
 
     module.exports = router;
