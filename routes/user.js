@@ -79,7 +79,11 @@ router.post('/updatePassword', (req, res, next) => {
 });
 
 
-
+//Crear macetero
+//editar contraña/nombre red
+//asignar planta
+//sensor obtener ultimo datos sensores
+//sensor obtener ultimo forzado
 
 
 

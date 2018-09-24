@@ -256,8 +256,8 @@ const insertHumedad = async (macetero, valor) =>{
                 // console.log(datosPlanta);
                 // resolve({ok:planta.dataValues.maceteroPlanta[0].dataValues.planta[0]});
             }else{
+                console.log(datosPlanta, datosCuidado );
                 reject({
-                    error,
                     description:'Error'
                 });
             }
@@ -340,7 +340,6 @@ const insertLuz = async (macetero, valor) =>{
                 }
             }else{
                 reject({
-                    error,
                     description:'Error'
                 });
             }
@@ -402,6 +401,140 @@ const insertAgua = async (macetero, valor) =>{
 };
 
 
+router.post('/getLast',(req,res,next)=>{
+    // req.body.token
+    // req.body.idMacetero
+    // include: {
+    //     model: models.plantaAsignada,
+    //         as: 'maceteroPlanta',
+    //         order: 'createdAt DESC',
+    //         include: {
+    //         model: models.planta,
+    //             order: 'createdAt DESC'
+    //     }
+    // }
+
+    firebaseAdmin.auth().verifyIdToken(req.body.token)
+    .then(decodedToken => {
+        models.user.findOne({
+            where:{
+                token: decodedToken.uid
+            },
+            include: {
+                model: models.macetero,
+                as: 'userMacetero',
+                where: {
+                    idMacetero: req.body.idMacetero
+                },
+                include:{
+                    model: models.humedad,
+                    as: 'maceteroHumedad',
+                    order: 'createdAt DESC'
+                }
+            }
+        })
+        .then(Humedad =>{
+            models.user.findOne({
+                where:{
+                    token: decodedToken.uid
+                },
+                include: {
+                    model: models.macetero,
+                    as: 'userMacetero',
+                    where: {
+                        idMacetero: req.body.idMacetero
+                    },
+                    include:{
+                        model: models.luz,
+                        as: 'maceteroLuz',
+                        order: 'createdAt DESC'
+                    }
+                }
+            })
+            .then(Luz =>{
+                models.user.findOne({
+                    where:{
+                        token: decodedToken.uid
+                    },
+                    include: {
+                        model: models.macetero,
+                        as: 'userMacetero',
+                        where: {
+                            idMacetero: req.body.idMacetero
+                        },
+                        include:{
+                            model: models.agua,
+                            as: 'maceteroAgua',
+                            order: 'createdAt DESC'
+                        }
+                    }
+                })
+                .then(Agua =>{
+                    let l1 = Humedad.dataValues.userMacetero[0].dataValues.maceteroHumedad.length;
+                    let l2 = Agua.dataValues.userMacetero[0].dataValues.maceteroAgua.length;
+                    let l3 = Luz.dataValues.userMacetero[0].dataValues.maceteroLuz.length;
+                    console.log('HUMEDAD ULTIMO',Humedad.dataValues.userMacetero[0].dataValues.maceteroHumedad[l1-1].valor);
+                    console.log('AGUA ULTIMO',Agua.dataValues.userMacetero[0].dataValues.maceteroAgua[l2-1].valor);
+                    console.log('LUZ ULTIMO',Luz.dataValues.userMacetero[0].dataValues.maceteroLuz[l3-1].valor);
+                    res.json({
+                        status:1,
+                        Humedad:Humedad.dataValues.userMacetero[0].dataValues.maceteroHumedad[l1-1].valor,
+                        Luz:Luz.dataValues.userMacetero[0].dataValues.maceteroLuz[l3-1].valor,
+                        Agua:Agua.dataValues.userMacetero[0].dataValues.maceteroAgua[l2-1].valor
+                    });
+                })
+                .catch(error => {
+                    console.log('ERROR: ', error);
+                    res.json({
+                        error
+                    });
+                });
+            })
+            .catch(error => {
+                console.log('ERROR: ', error);
+                res.json({
+                    error
+                });
+            });
+        })
+        .catch(error => {
+            console.log('ERROR: ', error);
+            res.json({
+                error
+            });
+        })
+    }).catch(error =>{
+        res.json({
+            code:'0',
+            description:'error al verificar token de usuario',
+        });
+    });
+
+});
+
+
+router.post('/getLastForce',(req,res,next)=>{
+
+
+    res.json({
+        ok:'ok'
+    });
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -446,6 +579,8 @@ router.post('/testPlanta2',(req,res,next)=>{
         });
     })
 });
+
+
 
 
 
