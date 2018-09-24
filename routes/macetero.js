@@ -12,25 +12,43 @@ app.use(bodyParser.urlencoded({ extended: false }));
 router.post('/insert',(req,res,next)=>{
     firebaseAdmin.auth().verifyIdToken(req.body.token)
         .then(decodedToken => {
-            models.macetero.create({
-                userToken: decodedToken.uid,
-                idMacetero:req.body.idMacetero,
-                nombreRed: req.body.nombreRed,
-                passRed: req.body.passRed
-            }).then(maceteroCreated =>{
-                res.json({
-                    status: 1,
-	                statusCode: 'macetero/insert/ok',
-	                description: 'ok',
-                });    
-            }).catch(error => {
+            models.user.findOne({
+                where:  {token: decodedToken.uid
+                }
+            }).then(usuario =>{
+                if (usuario){
+                    models.macetero.create({
+                    idMacetero: req.body.idMacetero,
+                    nombreRed: req.body.nombreRed,
+                    passRed: req.body.passRed
+                    }).then(maceteroCreated =>{
+                        usuario.addUserMacetero(maceteroCreated)
+                        res.json({
+                            status: 1,
+                            statusCode: 'macetero/insert/ok',
+                            description: 'ok',
+                        });    
+                    }).catch(error => {
+                        res.json({
+                            status: 0,
+                            statusCode: 'macetero/insert/error',
+                            description: 'Error base de datos'
+                        });
+                    });
+            } else {
                 res.json({
                     status: 0,
                     statusCode: 'macetero/insert/error',
-                    description: 'Error base de datos'
+                    description: 'No se encontró el usuario'
                 });
-            });
-
+            }
+        }).catch(error =>{
+            res.json({
+                        status: 0,
+                        statusCode: 'macetero/insert/error',
+                        description: 'Error base de datos'
+                    });
+        });
         }).catch(error =>{
             res.json({
                 code:'0',
@@ -60,12 +78,9 @@ router.post('/asignarplanta',(req,res,next)=>{
             tipoCuidado: tipoCuidado
         })
         .then(associatedPlant =>{
-            /* res.json({
-                status: 1,
-                statusCode: 'plantaAsignada creada'
-            });  */
 
-            macetero.addplantaAsignada(associatedPlant.id)
+
+            macetero.addMaceteroPlanta(associatedPlant)
         })
         .catch(error => {
             res.json({
@@ -85,7 +100,11 @@ router.post('/asignarplanta',(req,res,next)=>{
 router.get('/:id', (req, res) => {
     models.macetero.findOne({
         where: {
-          ididMacetero: req.params.id
+          idMacetero: req.params.id
+        },
+        include: {
+            model: models.plantaAsignada,
+            as: 'maceteroPlanta'
         }
     })
     .then(macetero =>{
