@@ -39,7 +39,7 @@ router.post('/search', (req, res, next)=>{
     models.plantaAsignada
     .findOne({
         where:  {maceteroIdMacetero: idMacetero,
-                estado: 1
+                estado: true
                 }
     })
     .then(response=>{
