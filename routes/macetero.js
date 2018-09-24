@@ -64,6 +64,7 @@ router.post('/asignarplanta',(req,res,next)=>{
     var estado = (req.body['estado'] == "1");
     var nombrePlanta = req.body['nombrePlanta'];
     var tipoCuidado = (req.body['tipoCuidado'] == "1");
+    var idPlanta = req.body['idPlanta'];
 
     models.macetero.findOne({
         where:{
@@ -77,13 +78,28 @@ router.post('/asignarplanta',(req,res,next)=>{
             nombrePlanta: nombrePlanta,
             tipoCuidado: tipoCuidado
         })
-        .then(associatedPlant =>{             
-            macetero.addMaceteroPlanta(associatedPlant)
-            res.json({
-                status: 1,
-                statusCode: 'macetero/asignarplanta/ok',
-                description: 'Planta asociada',
+        .then(associatedPlant =>{
+            macetero.addMaceteroPlanta(associatedPlant);
+            models.planta.findOne({
+                where:{
+                    id: idPlanta
+                }
+            })
+            .then(findPlanta =>{
+                associatedPlant.addPlanta(findPlanta);
+                res.json({
+                    status: 1,
+                    statusCode: 'macetero/asignarplanta/ok',
+                    description: 'ok',
+                });
+            })
+            .catch(error => {
+                res.json({
+                    status: 0,
+                    statusCode: 'No se encontró la planta'
+                });
             });
+           
         })
         .catch(error => {
             res.json({
@@ -125,5 +141,24 @@ router.get('/:id', (req, res) => {
     });
 });
 
-
+router.get('/todo', (req, res) => {
+    models.plantaAsignada.findAll({
+        include: {
+            model: models.planta
+        }
+    })
+    .then(macetero =>{
+        res.json({
+            status: 1,
+            data: macetero
+        });
+    })
+    .catch(error => {
+        console.log('Ocurrio un error')
+        res.status(400).json({
+            status:0,
+            data: error
+        })
+    });
+});
     module.exports = router;
