@@ -78,7 +78,11 @@ router.post('/asignarplanta',(req,res,next)=>{
             tipoCuidado: tipoCuidado
         })
         .then(associatedPlant =>{
-
+            res.json({
+                status: 1,
+                statusCode: 'macetero/asignarplanta/ok',
+                description: 'Planta asociada',
+            }); 
 
             macetero.addMaceteroPlanta(associatedPlant)
         })
