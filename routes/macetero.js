@@ -77,14 +77,13 @@ router.post('/asignarplanta',(req,res,next)=>{
             nombrePlanta: nombrePlanta,
             tipoCuidado: tipoCuidado
         })
-        .then(associatedPlant =>{
+        .then(associatedPlant =>{             
+            macetero.addMaceteroPlanta(associatedPlant)
             res.json({
                 status: 1,
                 statusCode: 'macetero/asignarplanta/ok',
                 description: 'Planta asociada',
-            }); 
-
-            macetero.addMaceteroPlanta(associatedPlant)
+            });
         })
         .catch(error => {
             res.json({
