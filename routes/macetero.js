@@ -116,6 +116,33 @@ router.post('/asignarplanta',(req,res,next)=>{
     });
 });
 
+router.post('/update',(req,res,next)=>{
+    let idMacetero = req.body['idMacetero'];
+    models.macetero.findOne({
+        where:{
+            idMacetero: idMacetero
+        }
+    })
+    .then(macetero => {
+        macetero.updateAttributes({
+            nombreRed: req.body['nombreRed'],
+            passRed: req.body['passRed']
+          })
+        res.json({
+            status: 1,
+            statusCode: 'macetero/update/ok',
+            description: 'ok',
+        });
+    })
+    .catch(error=> {
+        res.json({
+            status: 1,
+            statusCode: 'macetero/update/error',
+            description: 'error',
+        });
+    })
+});
+
 router.get('/:id', (req, res) => {
     models.macetero.findOne({
         where: {
