@@ -72,39 +72,102 @@ router.post('/asignarplanta',(req,res,next)=>{
         }
     })
     .then(macetero => {
-        models.plantaAsignada.create({
-            fechaFin: fechaFin,
-            estado: estado,
-            nombrePlanta: nombrePlanta,
-            tipoCuidado: tipoCuidado
+        models.plantaAsignada.findOne({
+            where:{
+                maceteroIdMacetero: idMacetero,
+                estado: true
+            }
         })
-        .then(associatedPlant =>{
-            macetero.addMaceteroPlanta(associatedPlant);
-            models.planta.findOne({
-                where:{
-                    id: idPlanta
-                }
-            })
-            .then(findPlanta =>{
-                associatedPlant.addPlanta(findPlanta);
-                res.json({
-                    status: 1,
-                    statusCode: 'macetero/asignarplanta/ok',
-                    description: 'ok',
+        .then(associatedPlantTrue =>{
+            if (associatedPlantTrue == null) {
+                models.plantaAsignada.create({
+                    fechaFin: fechaFin,
+                    estado: estado,
+                    nombrePlanta: nombrePlanta,
+                    tipoCuidado: tipoCuidado
+                })
+                .then(associatedPlant =>{
+                    macetero.addMaceteroPlanta(associatedPlant);
+                    models.planta.findOne({
+                        where:{
+                            id: idPlanta
+                        }
+                    })
+                    .then(findPlanta =>{
+                        associatedPlant.addPlanta(findPlanta);
+                        res.json({
+                            status: 1,
+                            statusCode: 'macetero/asignarplanta/ok null',
+                            description: 'ok',
+                        });
+                    })
+                    .catch(error => {
+                        res.json({
+                            status: 0,
+                            statusCode: 'No se encontró la planta y no habia asignaciones'
+                        });
+                    });
+                   
+                })
+                .catch(error => {
+                    res.json({
+                        status: 0,
+                        statusCode: 'Ocurrio un error y no habia asignaciones'
+                    });
                 });
-            })
-            .catch(error => {
-                res.json({
-                    status: 0,
-                    statusCode: 'No se encontró la planta'
+            } else {
+                associatedPlantTrue.updateAttributes({
+                    estado: false
+                })
+                .then(associatedPlantFalse =>{
+                    models.plantaAsignada.create({
+                        fechaFin: fechaFin,
+                        estado: estado,
+                        nombrePlanta: nombrePlanta,
+                        tipoCuidado: tipoCuidado
+                    })
+                    .then(associatedPlant =>{
+                        macetero.addMaceteroPlanta(associatedPlant);
+                        models.planta.findOne({
+                            where:{
+                                id: idPlanta
+                            }
+                        })
+                        .then(findPlanta =>{
+                            associatedPlant.addPlanta(findPlanta);
+                            res.json({
+                                status: 1,
+                                statusCode: 'macetero/asignarplanta/ok nonull',
+                                description: 'ok',
+                            });
+                        })
+                        .catch(error => {
+                            res.json({
+                                status: 0,
+                                statusCode: 'No se encontró la planta y habia asignaciones'
+                            });
+                        });
+                       
+                    })
+                    .catch(error => {
+                        res.json({
+                            status: 0,
+                            statusCode: 'Ocurrio un error y habia asignaciones'
+                        });
+                    });
+                })
+                .catch(error => {
+                    res.json({
+                        status: 0,
+                        statusCode: 'No se pudieron modificar los datos'
+                    });
                 });
-            });
-           
+            }
         })
         .catch(error => {
             res.json({
                 status: 0,
-                statusCode: 'Ocurrio un error'
+                statusCode: 'Ocurrio un error al buscar la asignacion'
             });
         });
     })
