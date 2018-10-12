@@ -231,6 +231,31 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.get('/maceterosUser/:token', (req, res) => {
+    models.user.findOne({
+        where: {
+          token: req.params.token
+        },
+        include: {
+            model: models.macetero,
+            as: 'userMacetero'
+        }
+    })
+    .then(user =>{
+        res.json({
+            status: 1,
+            data: user.userMacetero
+        });
+    })
+    .catch(error => {
+        console.log('Ocurrio un error')
+        res.status(400).json({
+            status:0,
+            data: error
+        })
+    });
+});
+
 router.get('/todo', (req, res) => {
     models.plantaAsignada.findAll({
         include: {
