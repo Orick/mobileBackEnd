@@ -616,7 +616,7 @@ const insertAgua = async (macetero, valor) =>{
         if(valor <= 0.2){
             models.notificaciones.create({
                 tipo: 'Agua',
-                descripcion: 'Porcentaje menor al 20%'
+                descripcion: 'Porcentaje de agua restante '+valor+'%'
             }).then(notificacion => {
                 if(notificacion){
                     console.log('NOTIFICACION CREADA AGUA');
