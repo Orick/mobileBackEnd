@@ -19,17 +19,21 @@ module.exports = (sequelize, DataTypes) => {
     });
     macetero.associate =  (models) => {
 
-        macetero.hasMany(models.agua, {
-            as: 'maceteroAgua'
+        macetero.hasMany(models.sensores, {
+            as: 'maceteroSensores'
         });
 
-        macetero.hasMany(models.humedad, {
-            as: 'maceteroHumedad'
-        });
+        // macetero.hasMany(models.agua, {
+        //     as: 'maceteroAgua'
+        // });
 
-        macetero.hasMany(models.luz, {
-            as: 'maceteroLuz'
-        });
+        // macetero.hasMany(models.humedad, {
+        //     as: 'maceteroHumedad'
+        // });
+
+        // macetero.hasMany(models.luz, {
+        //     as: 'maceteroLuz'
+        // });
 
         macetero.hasMany(models.plantaAsignada, {
             as: 'maceteroPlanta'
