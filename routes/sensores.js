@@ -155,25 +155,14 @@ router.post('/insert',(req,res,next)=>{
                     // humedad: this.body.humedad,
                     // luz: this.body.luz,
                     // agua: this.body.agua,
-                    console.log("AAAAA",req.body.humedad,datosPlanta.humedadOptima);
                     estadoHumedad = req.body.humedad <= datosPlanta.humedadOptima? false : true;
-                    console.log("AAAAA");
                     estadoLuz = req.body.luz <= datosPlanta.luzOptima? false : true;
-                    console.log("AAAAA");
                     estadoAgua = req.body.agua <= 0.2 ? false : true;
-                    console.log("AAAAA");
-                    console.log("AAAAA");
                 }else{
-                    console.log("BBBBB");
                     estadoHumedad = req.body.humedad <= datosPlanta.humedadMinima? false : true;
-                    console.log("BBBBB");
                     estadoLuz = req.body.luz <= datosPlanta.luzMinima? false : true;
-                    console.log("BBBBB");
                     estadoAgua = req.body.agua <= 0.2 ? false : true;
-                    console.log("BBBBB");
-                    console.log("BBBBB");
                 }
-                console.log("Datos por cuidado ok");
                 // tipoCuidato 1 = Optimo
                 // tipoCuidato 0 = Minimo
                 //  insertHumedad(macetero, req.body.humedad),
