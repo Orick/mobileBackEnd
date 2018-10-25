@@ -206,7 +206,7 @@ router.post('/update',(req,res,next)=>{
     })
 });
 
-router.post('delete', (req, res) => {
+router.post('/delete', (req, res) => {
     let idMacetero = req.body['idMacetero'];
     models.macetero.findOne({
         where: {
