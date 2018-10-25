@@ -215,16 +215,33 @@ router.post('/delete', (req, res) => {
     })
     .then(macetero =>{
         
-        models.plantaAsignada.findOne({
+        models.plantaAsignada.findAll({
             where: {
                 maceteroIdMacetero: idMacetero
             }
         })
         .then(plantaasig =>{
-            plantaasig.destroy()
-            .then(destroyObject => {
-                console.log("plantaAsignada eliminada")
-            })
+            plantaasig.forEach(asignplant => {
+                asignplant.destroy()
+                .then(destroyObject => {
+                    console.log("plantaAsignada eliminada")
+                })
+                .catch(error => {
+                    console.log('Ocurrio un error en eliminacion plantaAsignadas')
+                    res.status(400).json({
+                        status:0,
+                        data: error
+                    })
+                });
+            });
+
+            macetero.destroy()
+            .then(
+                res.json({
+                    status: 1,
+                    data: "macetero eliminado"
+                })
+            )
             .catch(error => {
                 console.log('Ocurrio un error en eliminacion macetero')
                 res.status(400).json({
@@ -235,21 +252,6 @@ router.post('/delete', (req, res) => {
         })
         .catch(error => {
             console.log('Planta asignada no encontrada')
-            res.status(400).json({
-                status:0,
-                data: error
-            })
-        });
-        
-        macetero.destroy()
-        .then(
-            res.json({
-                status: 1,
-                data: "macetero eliminado"
-            })
-        )
-        .catch(error => {
-            console.log('Ocurrio un error en eliminacion macetero')
             res.status(400).json({
                 status:0,
                 data: error
