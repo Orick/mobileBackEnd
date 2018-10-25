@@ -320,7 +320,7 @@ router.get('/maceterosUser/:token', (req, res) => {
 router.get('/todo', (req, res) => {
     models.plantaAsignada.findAll({
         include: {
-            model: models.planta
+            model: models.planta, as: "asignadaPlanta"
         }
     })
     .then(macetero =>{
