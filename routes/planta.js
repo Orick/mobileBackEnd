@@ -29,4 +29,25 @@ router.post('/insert',(req,res,next)=>{
 	    });
 	});
 });
+
+router.get('/all', (req, res, next)=>{
+    models.planta
+    .findAll()
+    .then(champions=>{
+        if (champions){
+            res.json({
+                status: 1,
+            data: champions
+            });
+        } else {
+            res.status(400).json({
+                status:0
+            });
+        }
+    }).catch(error => {
+        res.status(400).json({
+            status:0
+        });
+    });
+});
     module.exports = router;
