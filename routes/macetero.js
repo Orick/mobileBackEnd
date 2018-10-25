@@ -214,9 +214,10 @@ router.post('/delete', (req, res) => {
         }
     })
     .then(macetero =>{
+        
         models.plantaAsignada.findOne({
             where: {
-              idMacetero: idMacetero
+                maceteroIdMacetero: idMacetero
             }
         })
         .then(plantaasig =>{
