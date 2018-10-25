@@ -32,7 +32,7 @@ router.post('/insert',(req,res,next)=>{
                         res.json({
                             status: 0,
                             statusCode: 'macetero/insert/error',
-                            description: 'Error base de datos'
+                            description: 'Error base de datos user'
                         });
                     });
             } else {
@@ -46,7 +46,7 @@ router.post('/insert',(req,res,next)=>{
             res.json({
                         status: 0,
                         statusCode: 'macetero/insert/error',
-                        description: 'Error base de datos'
+                        description: 'Error base de datos macetero'
                     });
         });
         }).catch(error =>{
@@ -204,6 +204,64 @@ router.post('/update',(req,res,next)=>{
             description: 'error',
         });
     })
+});
+
+router.post('delete', (req, res) => {
+    let idMacetero = req.body['idMacetero'];
+    models.macetero.findOne({
+        where: {
+          idMacetero: idMacetero
+        }
+    })
+    .then(macetero =>{
+        models.plantaAsignada.findOne({
+            where: {
+              idMacetero: idMacetero
+            }
+        })
+        .then(plantaasig =>{
+            plantaasig.destroy()
+            .then(destroyObject => {
+                console.log("plantaAsignada eliminada")
+            })
+            .catch(error => {
+                console.log('Ocurrio un error en eliminacion macetero')
+                res.status(400).json({
+                    status:0,
+                    data: error
+                })
+            });
+        })
+        .catch(error => {
+            console.log('Planta asignada no encontrada')
+            res.status(400).json({
+                status:0,
+                data: error
+            })
+        });
+        
+        macetero.destroy()
+        .then(
+            res.json({
+                status: 1,
+                data: "macetero eliminado"
+            })
+        )
+        .catch(error => {
+            console.log('Ocurrio un error en eliminacion macetero')
+            res.status(400).json({
+                status:0,
+                data: error
+            })
+        });
+    })
+    .catch(error => {
+        console.log('Ocurrio un error')
+        res.status(400).json({
+            status:0,
+            data: error
+        })
+    });
 });
 
 router.get('/:id', (req, res) => {
