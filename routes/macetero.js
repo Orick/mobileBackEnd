@@ -201,7 +201,7 @@ router.post('/update',(req,res,next)=>{
         res.json({
             status: 1,
             statusCode: 'macetero/update/error',
-            description: 'error',
+            description: error,
         });
     })
 });
@@ -303,10 +303,43 @@ router.get('/maceterosUser/:token', (req, res) => {
         }
     })
     .then(user =>{
+        maceterosArray = [];
+        user.userMacetero.map(function (maceterodata){
+            maceterosArray.push(maceterodata.idMacetero);
+        })
         res.json({
             status: 1,
-            data: user.userMacetero
+            data: maceterosArray
         });
+    })
+    .catch(error => {
+        console.log('Ocurrio un error')
+        res.status(400).json({
+            status:0,
+            data: error
+        })
+    });
+});
+
+router.get('/plantAsigMac/:idMacetero', (req, res) => {
+    models.macetero.findOne({
+        where:{
+            idMacetero: req.params.idMacetero
+        },
+        include: {
+            model: models.plantaAsignada,
+            as: 'maceteroPlanta'
+        }
+    })
+    .then(plantAsig =>{
+        plantAsig.maceteroPlanta.map(function (asignacion) {
+            if(asignacion.estado == true){
+                res.json({
+                    status: 1,
+                    data: asignacion.nombrePlanta
+                });
+            }
+        })
     })
     .catch(error => {
         console.log('Ocurrio un error')
