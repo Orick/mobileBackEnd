@@ -321,10 +321,16 @@ router.get('/maceterosUser/:token', (req, res) => {
     });
 });
 
-router.get('/plantAsigMac/:idMacetero', (req, res) => {
-    models.macetero.findOne({
+router.get('/plantAsigMac/:idsMaceteros', (req, res) => {
+    let ids = req.params.idsMaceteros;
+    let idsArray = new Array();
+    idsArray = ids.split("||");
+
+    models.macetero.findAll({
         where:{
-            idMacetero: req.params.idMacetero
+            idMacetero: {
+                [Op.or]: idsArray
+            }
         },
         include: {
             model: models.plantaAsignada,
@@ -332,14 +338,26 @@ router.get('/plantAsigMac/:idMacetero', (req, res) => {
         }
     })
     .then(plantAsig =>{
-        plantAsig.maceteroPlanta.map(function (asignacion) {
-            if(asignacion.estado == true){
-                res.json({
-                    status: 1,
-                    data: asignacion.nombrePlanta
-                });
-            }
+
+        let asignacionMacetero = [];
+        let asignacionTrue = [];
+
+        plantAsig.map(function (macetero) {
+            asignacionMacetero.push(macetero.maceteroPlanta)
         })
+
+        asignacionMacetero.map(function (asignacion) {
+            asignacion.map(function (asignacionName) {
+                if(asignacionName.estado == true){
+                    asignacionTrue.push(asignacionName.nombrePlanta);
+                }
+            })
+        })
+
+        res.json({
+            status: 1,
+            data: asignacionTrue
+        });
     })
     .catch(error => {
         console.log('Ocurrio un error')
