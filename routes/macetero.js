@@ -292,33 +292,43 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.get('/maceterosUser/:token', (req, res) => {
-    models.user.findOne({
-        where: {
-          token: req.params.token
-        },
-        include: {
-            model: models.macetero,
-            as: 'userMacetero'
-        }
-    })
-    .then(user =>{
-        maceterosArray = [];
-        user.userMacetero.map(function (maceterodata){
-            maceterosArray.push(maceterodata.idMacetero);
+router.get('/maceterosUser/:temptoken', (req, res) => {
+    firebaseAdmin.auth().verifyIdToken(req.params.temptoken)
+    .then(decodedToken => {
+        models.user.findOne({
+            where: {
+              token: decodedToken.uid
+            },
+            include: {
+                model: models.macetero,
+                as: 'userMacetero'
+            }
         })
-        res.json({
-            status: 1,
-            data: maceterosArray
+        .then(user =>{
+            maceterosArray = [];
+            user.userMacetero.map(function (maceterodata){
+                maceterosArray.push(maceterodata.idMacetero);
+            })
+            res.json({
+                status: 1,
+                data: maceterosArray
+            });
+        })
+        .catch(error => {
+            console.log('Ocurrio un error buscando el usuario')
+            res.status(400).json({
+                status:0,
+                data: error
+            })
         });
     })
-    .catch(error => {
+    .catch(error =>{
         console.log('Ocurrio un error')
         res.status(400).json({
             status:0,
             data: error
         })
-    });
+    });    
 });
 
 router.get('/plantAsigMac/:idMacetero', (req, res) => {
