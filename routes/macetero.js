@@ -342,17 +342,21 @@ router.get('/plantAsigMac/:idsMaceteros', (req, res) => {
         let asignacionMacetero = [];
         let asignacionTrue = [];
 
-        plantAsig.map(function (macetero) {
-            asignacionMacetero.push(macetero.maceteroPlanta)
-        })
+        idsArray.map(function (idSort){
+            plantAsig.map(function (macetero) {
+                if(macetero.idMacetero == idSort) {
+                    asignacionMacetero.push(macetero.maceteroPlanta);
+                }
+            });
+        });
 
         asignacionMacetero.map(function (asignacion) {
             asignacion.map(function (asignacionName) {
                 if(asignacionName.estado == true){
                     asignacionTrue.push(asignacionName.nombrePlanta);
                 }
-            })
-        })
+            });
+        });
 
         res.json({
             status: 1,
