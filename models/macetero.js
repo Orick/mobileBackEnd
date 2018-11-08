@@ -23,17 +23,9 @@ module.exports = (sequelize, DataTypes) => {
             as: 'maceteroSensores'
         });
 
-        // macetero.hasMany(models.agua, {
-        //     as: 'maceteroAgua'
-        // });
-
-        // macetero.hasMany(models.humedad, {
-        //     as: 'maceteroHumedad'
-        // });
-
-        // macetero.hasMany(models.luz, {
-        //     as: 'maceteroLuz'
-        // });
+        macetero.hasMany(models.fotos, {
+            as: 'maceteroFotos'
+        });
 
         macetero.hasMany(models.plantaAsignada, {
             as: 'maceteroPlanta'
