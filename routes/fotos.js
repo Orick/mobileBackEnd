@@ -3,14 +3,13 @@ const app = express();
 const bodyParser = require('body-parser');
 const router = express.Router();
 const models = require('../models');
-//var FS = require('fs');
+var FS = require('fs');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 router.post('/insertfoto',(req,res,next)=>{
 
-    //var imagen = FS.readFileSync(req.body['imagen']);
-    var imagen = req.body['base64code'];
+    var imagen = FS.readFileSync(req.body['imageDir']);
     var idMacetero = req.body['idMacetero'];
 
     //console.log(imagen);
@@ -59,7 +58,7 @@ router.post('/insertfoto',(req,res,next)=>{
 });
 
 router.get('/:idMacetero', (req, res) => {
-    models.fotos.findOne({
+    models.macetero.findOne({
         where: {
           idMacetero: req.params.idMacetero
         },
